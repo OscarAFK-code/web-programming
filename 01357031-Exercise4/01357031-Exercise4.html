@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Exercise 4</title>
+  <style>
+    body {
+      font-family: Helvetica;
+    }
+
+    .name {
+      color: Firebrick;
+      font-weight: bold;
+    }
+
+    .age {
+      color: Navy;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div id="output"></div>
+
+  <script>
+    let thisYear = new Date().getFullYear();
+    let name = window.prompt("Plz input your name:"); 
+    let birth = window.prompt("Plz input your birth year:");
+    let age = thisYear - Number(birth);
+
+    let outputDiv = document.getElementById("output");
+
+    if (isNaN(birth) || age <= 0) {
+      alert("Your input is incorrect!");
+      console.log("Your input is incorrect!");
+      outputDiv.innerHTML = `HELLO, <span class="name"> ${name}</span>! <br><p>Your age is a mystery!</p>`;}
+      else if (age == 1) {
+      let msg = `HELLO <span class = "name">KID! </span> <br> You are <span class = "age">1</span> year old!`;
+      outputDiv.innerHTML = msg;
+      console.log(`HELLO kid!`);
+      console.log(`You are 1 year old!`);
+      }
+      else {
+      let message = `Hello <span class="name">${name}</span>!<br> You are <span class="age">${age}</span> years old.`;
+      outputDiv.innerHTML = message;
+      console.log(`Hello ${name}! You are ${age} years old.`);
+    }   
+  </script>
+</body>
+</html>

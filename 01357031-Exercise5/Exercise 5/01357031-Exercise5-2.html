@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Pokemon Grid</title>
+    <style>
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            padding: 20px;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: auto auto auto auto auto auto auto auto;
+            gap: 12px;
+            align-items: end;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        #display {
+            margin-top: 16px;
+            line-height: 0;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+
+        .btn:hover {
+            background: #f0f0f0;
+        }
+
+        hr {
+            margin: 16px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Pokemon Grid</h1>
+
+    <form id="pokemonForm" onsubmit="return false;">
+        <div>
+            <label for="pokemon">Pokemon (1~5):</label><br />
+            <select id="pokemon">
+                <option value="1">1-pikachu</option>
+                <option value="2">2-bulbasaur</option>
+                <option value="3">3-charmander</option>
+                <option value="4">4-squirtle</option>
+                <option value="5">5-random</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="side">Side length (1~10):</label>(預設5)<br />
+            <input id="side" type="number" value="5" min="1" max="10" />
+        </div>
+
+        <div>
+            <label for="size">Image size (50~150):</label>(預設100)<br />
+            <input id="size" type="number" value="100" min="50" max="150" />
+        </div>
+
+        <button id="drawBtn" class="btn" type="button">Draw</button>
+        <button id="clearBtn" class="btn" type="button">Clear</button>
+    </form>
+
+    <hr />
+
+    <div id="display"></div>
+    
+
+
+
+
+<script>
+    (function(){
+      const pokemonFiles = [
+        'pikachu.png',
+        'bulbasaur.png',
+        'charmander.png',
+        'squirtle.png'
+      ];
+
+      const sel = document.getElementById('pokemon');
+      const sideInput = document.getElementById('side');
+      const sizeInput = document.getElementById('size');
+      const drawBtn = document.getElementById('drawBtn');
+      const clearBtn = document.getElementById('clearBtn');
+      const gridContainer = document.getElementById('display');
+
+      function validate(side, size){
+        if(!(Number.isInteger(side) && side >=1 && side <=10)){
+          alert('Side length must be an integer between 1 and 10.');
+          return false;
+        }
+        if(!(Number.isInteger(size) && size >=50 && size <=150)){
+          alert('Image size must be an integer between 50 and 150.');
+          return false;
+        }
+        return true;
+      }
+
+      function clearGrid(){
+        gridContainer.innerHTML = '';
+      }
+
+      function drawGrid(){
+        const choice = Number(sel.value); // 1-5
+        const side = Number(sideInput.value);
+        const size = Number(sizeInput.value);
+
+        if(!validate(Math.floor(side), Math.floor(size))) return;
+
+        clearGrid();
+
+        const grid = document.createElement('div');
+        grid.className = 'grid';
+        
+        grid.style.gridTemplateColumns = `repeat(${side}, ${size}px)`;
+        grid.style.gridAutoRows = `${size}px`;
+
+        const total = side * side;
+
+        for(let i=0;i<total;i++){
+          const img = document.createElement('img');
+          img.width = size;
+          img.height = size;
+          img.alt = 'Pokemon';
+
+          if(choice === 5){
+            const r = Math.floor(Math.random()*4);
+            img.src = pokemonFiles[r];
+          } else {
+            img.src = pokemonFiles[choice - 1];
+          }
+
+          img.onerror = function(){
+            img.style.background = '#f2f2f2';
+            img.style.border = '1px dashed #ccc';
+            img.title = 'Image not found: ' + img.src;
+          };
+
+          grid.appendChild(img);
+        }
+
+        gridContainer.appendChild(grid);
+      }
+
+      drawBtn.addEventListener('click', drawGrid);
+      clearBtn.addEventListener('click', clearGrid);
+
+      [sel, sideInput, sizeInput].forEach(el=>{
+        el.addEventListener('keydown', function(e){
+          if(e.key === 'Enter'){
+            e.preventDefault();
+            drawGrid();
+          }
+        });
+      });
+
+    })();
+  </script>
+</body>
+
+</html>
